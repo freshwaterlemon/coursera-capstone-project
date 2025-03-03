@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+#from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
@@ -48,7 +48,10 @@ def registration(request):
 
     try:
         User.objects.get(username=username)
-        return JsonResponse({"userName": username, "error": "Already Registered"})
+        return JsonResponse({
+            "userName": username,
+            "error": "Already Registered"
+        })
     except User.DoesNotExist:
         logger.debug(f"{username} is a new user")
 
@@ -121,6 +124,8 @@ def add_review(request):
             return JsonResponse({"status": 200})
         except Exception as e:
             logger.error(f"Error in posting review: {e}")
-            return JsonResponse({"status": 401, "message": "Error in posting review"})
-
+            return JsonResponse({
+                "status": 401,
+                "message": "Error in posting review"
+            })
     return JsonResponse({"status": 403, "message": "Unauthorized"})
